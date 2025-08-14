@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Buscador de Sucursales por ECO</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .result {
+            margin-top: 20px;
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 6px;
+        }
+        .result p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Buscador de Sucursales</h1>
+    <div class="container">
+        <input type="text" id="ecoInput" placeholder="Ingresa el número ECO">
+        <button onclick="buscarSucursal()">Buscar</button>
+        <div id="resultado" class="result"></div>
+    </div>
+
+    <script>
+        let datos = {};
+
+        fetch('directorio_sucursales.json')
+            .then(response => response.json())
+            .then(data => datos = data);
+
+        function buscarSucursal() {
+            const eco = document.getElementById('ecoInput').value.trim();
+            const resultado = document.getElementById('resultado');
+            resultado.innerHTML = '';
+
+            if (eco in datos) {
+                const info = datos[eco];
+                for (const [clave, valor] of Object.entries(info)) {
+                    const p = document.createElement('p');
+                    p.textContent = `${clave}: ${valor}`;
+                    resultado.appendChild(p);
+                }
+            } else {
+                resultado.innerHTML = '<p>No se encontró esa sucursal.</p>';
+            }
+        }
+    </script>
+</body>
+</html>
